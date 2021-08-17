@@ -1,0 +1,9 @@
+- Cursos:
+
+	- Nome;
+	- Nome do professor(a);
+	- Categoria (Programação, Design, Marketing, Gestão, Administração, ...);
+	- Qtd. vagas: 
+	- Valor;
+	- Duração (horas);
+	- Status (ainda não abriu, aberto, vagas completas, fechado, saiu da grade);
