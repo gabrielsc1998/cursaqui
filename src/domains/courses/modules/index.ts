@@ -37,7 +37,7 @@ class CoursesModule {
 			if(!_.isUndefined(result)) {
 				return result.rows;
 			}
-			return result
+			return result;
 		} catch (error) {
 			return { error };
 		}

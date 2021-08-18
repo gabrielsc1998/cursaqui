@@ -12,9 +12,9 @@ const routes = [
       body('name').isString(),
       body('category').isString(),
       body('teacher_name').isString(),
-      body('qtd_vacancies').isNumeric(),
-      body('value').isNumeric(),
-      body('duration').isNumeric(),
+      body('qtd_vacancies').isInt(),
+      body('value').isFloat(),
+      body('duration').isInt(),
       body('status').isString(),
     ],
     handler: controller.create

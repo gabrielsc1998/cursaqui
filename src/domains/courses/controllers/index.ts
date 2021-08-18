@@ -13,14 +13,14 @@ class CoursesController {
     this._module = CoursesModule;
   }
 
-  private _validateRequestData(request: Request): void {
+  private _validateRequestData = (request: Request): void => {
     const errors = validationResult(request);
     if(!errors.isEmpty()) {
       throw errors.array();
     }
   }
 
-  async create(request: Request, response: Response) {
+  create = async (request: Request, response: Response) => {
     try {
       this._validateRequestData(request);
       const payloadCreateCourse: CreateCourse = request.body;
@@ -35,11 +35,11 @@ class CoursesController {
     }
   }
 
-  async getById(request: Request, response: Response) {
+  getById = async (request: Request, response: Response) => {
     try {
       this._validateRequestData(request);
       const { id=0 } = request.params;
-      const getCourse = await this._module.getById(Number(id));
+      const getCourse = await CoursesModule.getById(Number(id));
       if(!_.isUndefined(getCourse)) {
         response.status(200).send(getCourse);
       } else {
@@ -50,10 +50,10 @@ class CoursesController {
     }
   }
   
-  async listAll(request: Request, response: Response) {
+  listAll = async (request: Request, response: Response) => {
     try {
       this._validateRequestData(request);
-      const courseList = await this._module.listAll();
+      const courseList = await CoursesModule.listAll();
       if(!_.isUndefined(courseList)) {
         response.status(200).send(courseList);
       } else {
@@ -64,12 +64,12 @@ class CoursesController {
     }
   }
 
-  async updateById(request: Request, response: Response) {
+  updateById = async (request: Request, response: Response) => {
     try {
       this._validateRequestData(request);
       const { id=0 } = request.params;
       const payloaUpdateCourse: UpdateCourse = request.body;
-      const updateCourse = await this._module.updateById(Number(id), {...payloaUpdateCourse});
+      const updateCourse = await CoursesModule.updateById(Number(id), {...payloaUpdateCourse});
       if(!_.isUndefined(updateCourse)) {
         response.status(200).send({ msg: 'Course updated!' });
       } else {
@@ -80,12 +80,11 @@ class CoursesController {
     }
   }
 
-
-  async deleteById(request: Request, response: Response) {
+  deleteById = async (request: Request, response: Response) => {
     try {
       this._validateRequestData(request);
       const { id=0 } = request.params;
-      const deleteCourse = await this._module.deleteById(Number(id));
+      const deleteCourse = await CoursesModule.deleteById(Number(id));
       if(!_.isUndefined(deleteCourse)) {
         response.status(200).send({ msg: 'Course deleted!' });
       } else {
