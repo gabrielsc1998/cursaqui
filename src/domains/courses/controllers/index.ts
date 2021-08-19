@@ -21,6 +21,12 @@ class CoursesController {
   }
 
   create = async (request: Request, response: Response) => {
+
+    /*
+      #swagger.tags = ['Dispositivo']
+      #swagger.description = 'Rota para extrair a versão do firmware do dispositivo'
+    */
+   
     try {
       this._validateRequestData(request);
       const payloadCreateCourse: CreateCourse = request.body;

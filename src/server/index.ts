@@ -1,32 +1,32 @@
 import express from 'express';
 import { Router } from 'express';
+import { Express } from 'express';
 import cors from 'cors';
 
-import { HTTPMethods } from './types';
-
-const app = express();
-
 class Server {
+  
+  private _app: Express;
 
   constructor() {
+    this._app = express();
     this._config();
   }
 
-  _config() {
+  private _config = () => {
     try {
-      this.use(cors());
-      this.use(express.json());
-      this.use(express.urlencoded({ extended: false }));
+      this._app.use(cors());
+      this._app.use(express.json());
+      this._app.use(express.urlencoded({ extended: false }));
     } catch(error) {
       console.log(` ## Error to _config [${error}]`);
     }
   }
 
-  async start(): Promise<boolean> {
+  start = async (): Promise<boolean> => {
     return new Promise((resolve, reject) => {
       try {
         const port=3000;
-        app.listen(port, () => {
+        this._app.listen(port, () => {
           console.log(` ## Server started - listening on http://localhost:${port}`);
           resolve(true);
         });
@@ -37,23 +37,15 @@ class Server {
     });
   }
 
-  use(method: any) {
+  useRouter = (path: string, router: Router) => {
     try {
-      app.use(method);
-    } catch(error) {
-      console.log(` ## Error to user [${error}]`);
-    }
-  }
-
-  useRouter(path: string, router: Router) {
-    try {
-      return app.use(path, router);
+      return this._app.use(path, router);
     } catch(error) {
       console.log(` ## Error to useRouter [${error}]`);
     }
   }
 
-  getRouter(): Router | undefined {
+  getRouter = (): Router | undefined => {
     try {
       return Router();
     } catch (error) {
@@ -62,19 +54,8 @@ class Server {
     return undefined;
   }
 
-  getMethod(method: string): string | undefined {
-    try {
-      const httpMethods: HTTPMethods = {
-        GET: 'GET',
-        PUT: 'PUT',
-        POST: 'POST',
-        DELETE: 'DELETE',
-      };
-      return httpMethods[method];
-    } catch (error) {
-      console.log(` ## Error to getMethod [${error}]`);
-    }
-    return undefined;
+  getInstance = (): Express => {
+    return this._app;
   }
 
 }

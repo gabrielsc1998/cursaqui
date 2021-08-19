@@ -2,10 +2,11 @@
   "compilerOptions": {
     "target": "es6",
     "module": "commonjs",
-    "rootDir": "./src",
+    "rootDir": "./",
     "outDir": "./build",
     "esModuleInterop": true,
     "strict": true,
-    "noImplicitThis": true
+    "noImplicitThis": true,
+    "types": ["reflect-metadata", "swagger-express-ts"],
   }
 }
