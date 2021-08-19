@@ -7,6 +7,6 @@
     "esModuleInterop": true,
     "strict": true,
     "noImplicitThis": true,
-    "types": ["reflect-metadata", "swagger-express-ts"],
+    "types": ["reflect-metadata", "swagger-express-ts", "mocha"]
   }
 }
