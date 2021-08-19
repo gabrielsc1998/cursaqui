@@ -63,7 +63,7 @@ class Domains {
 
                 if(Object.prototype.hasOwnProperty.call(routers, method)) {
                   routers[method]();
-                  console.log(` ## ${method} | ${BASE_PATH}${path}`);
+                  // console.log(` ## ${method} | ${BASE_PATH}${path}`);
                 }
               }
             });
