@@ -48,8 +48,8 @@ const buildSetUpdate = (values: UpdateCourse): string => {
   return setUpdate;
 };
 
-export const UPDATE_COURSE_BY_ID = (values: UpdateCourse, id: number): string => (`
-  UPDATE ${tableName} SET ${buildSetUpdate(values)} WHERE id=${id}
+export const UPDATE_COURSE_BY_ID = (values: UpdateCourse): string => (`
+  UPDATE ${tableName} SET ${buildSetUpdate(values)} WHERE id=$1
 `);
 
 export const DELETE_COURSE_BY_ID = `

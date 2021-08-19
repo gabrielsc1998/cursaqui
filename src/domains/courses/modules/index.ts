@@ -69,7 +69,7 @@ class CoursesModule {
 
 	updateById = async (id: number, payload: UpdateCourse) => {
 		try {
-			const result = await db.executeQuery(UPDATE_COURSE_BY_ID({...payload}, id));
+			const result = await db.executeQuery(UPDATE_COURSE_BY_ID({...payload}), [id]);
 			if(!_.isUndefined(result)) {
 				return result.rows;
 			}

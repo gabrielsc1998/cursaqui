@@ -4,12 +4,13 @@ import path from 'path';
 
 import Server from '../server';
 import { Routes } from './types';
+
 const SUBDIR_ROUTES = 'routes';
 
-import { Router } from 'express';
 class Domains {
 
   private _domainRoutes: Array<{BASE_PATH?: string, routes: Routes }>=[];
+
   constructor() {
     this._domainRoutes = [];
     this._sweepAndGet();
