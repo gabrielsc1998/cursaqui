@@ -1,13 +1,15 @@
 import { body, param } from 'express-validator';
 
+import { Routes } from '../../types';
 import controller from '../controllers';
 
 const BASE_PATH = '/courses';
-const routes = [
+
+const routes: Array<Routes> = [
   
   {
     method: 'POST',
-    path: `/create`,
+    path: '/create',
     validations: [
       body('name').isString(),
       body('category').isString(),
@@ -22,7 +24,7 @@ const routes = [
 
   {
     method: 'GET',
-    path: `/:id`,
+    path: '/:id',
     validations: [
       param('id').isNumeric()
     ],
@@ -31,13 +33,13 @@ const routes = [
 
   {
     method: 'GET',
-    path: `/`,
+    path: '/',
     handler: controller.listAll
   },
 
   {
-    method: 'UPDATE',
-    path: `/:id`,
+    method: 'PUT',
+    path: '/:id',
     validations: [
       param('id').isNumeric()
     ],
@@ -46,7 +48,7 @@ const routes = [
   
   {
     method: 'DELETE',
-    path: `/:id`,
+    path: '/:id',
     validations: [
       param('id').isNumeric()
     ],

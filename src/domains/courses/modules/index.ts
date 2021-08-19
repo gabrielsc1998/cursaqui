@@ -18,11 +18,11 @@ class CoursesModule {
     this._createTable();
   }
 
-  private async _createTable() {
-    db.executeQuery(CREATE_COURSES_TABLE);
+  private _createTable = async () => {
+    await db.executeQuery(CREATE_COURSES_TABLE);
   }
 
-	private async _loadAlias(data: CreateCourse) {
+	private _loadAlias = async (data: CreateCourse) => {
 		const alias:Array<string | number | boolean> = [];
 		Object.keys(data).forEach((key: string) => {
 			alias.push(data[key]);
@@ -30,7 +30,7 @@ class CoursesModule {
 		return alias;
 	}
 
-	async create(payload: CreateCourse) {
+	create = async (payload: CreateCourse) => {
 		try {
 			const alias = await this._loadAlias(payload);
       const result = await db.executeQuery(CREATE_COURSE, alias);
@@ -43,11 +43,11 @@ class CoursesModule {
 		}
 	}
 
-	async getById(id: number) {
+	getById = async (id: number) => {
 		try {
-			const result = await db.executeQuery(GET_COURSE_BY_ID(id));
+			const result = await db.executeQuery(GET_COURSE_BY_ID, [id]);
 			if(!_.isUndefined(result)) {
-				return result.rows;
+				return result.rows[0];
 			}
 			return result;
 		} catch (error) {
@@ -55,7 +55,7 @@ class CoursesModule {
 		}
 	}
 
-	async listAll() {
+	listAll = async () => {
 		try {
 			const result = await db.executeQuery(GET_ALL_COURSES);
 			if(!_.isUndefined(result)) {
@@ -67,7 +67,7 @@ class CoursesModule {
 		}
 	}
 
-	async updateById(id: number, payload: UpdateCourse) {
+	updateById = async (id: number, payload: UpdateCourse) => {
 		try {
 			const result = await db.executeQuery(UPDATE_COURSE_BY_ID({...payload}, id));
 			if(!_.isUndefined(result)) {
@@ -79,9 +79,9 @@ class CoursesModule {
 		}
 	}
 
-	async deleteById(id: number) {
+	deleteById = async (id: number) => {
 		try {
-			const result = await db.executeQuery(DELETE_COURSE_BY_ID(id));
+			const result = await db.executeQuery(DELETE_COURSE_BY_ID, [id]);
 			if(!_.isUndefined(result)) {
 				return result.rows;
 			}

@@ -33,9 +33,9 @@ export const GET_ALL_COURSES = `
   SELECT * FROM ${tableName}
 `;
 
-export const GET_COURSE_BY_ID = (id: number): string => (`
-  SELECT * FROM ${tableName} WHERE id=${id}
-`);
+export const GET_COURSE_BY_ID = `
+  SELECT * FROM ${tableName} WHERE id=$1
+`;
 
 const buildSetUpdate = (values: UpdateCourse): string => {
   let setUpdate = '';
@@ -52,7 +52,7 @@ export const UPDATE_COURSE_BY_ID = (values: UpdateCourse, id: number): string =>
   UPDATE ${tableName} SET ${buildSetUpdate(values)} WHERE id=${id}
 `);
 
-export const DELETE_COURSE_BY_ID = (id: number): string => (`
-  DELETE FROM ${tableName} WHERE id=${id}
-`);
+export const DELETE_COURSE_BY_ID = `
+  DELETE FROM ${tableName} WHERE id=$1
+`;
 

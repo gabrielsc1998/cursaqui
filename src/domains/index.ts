@@ -9,13 +9,13 @@ const SUBDIR_ROUTES = 'routes';
 import { Router } from 'express';
 class Domains {
 
-  private _domainRoutes: Array<{BASE_PATH?: string, routes?: Routes }>=[];
+  private _domainRoutes: Array<{BASE_PATH?: string, routes: Routes }>=[];
   constructor() {
     this._domainRoutes = [];
     this._sweepAndGet();
   }
 
-  private _sweepAndGet() {
+  private _sweepAndGet = () => {
     // Busca em cada domínio o arquivo 'routes' e importa as rotas, inserindo no array 'domainRoutes'
     fs  
       .readdirSync(__dirname)
@@ -34,37 +34,35 @@ class Domains {
       });
   }
 
-  async startRoutes(server: typeof Server) {
+  startRoutes = async (server: typeof Server) => {
     if(this._domainRoutes.length != 0) {
       this._domainRoutes.forEach(domainRoutes => {
-        const { BASE_PATH=undefined, routes=undefined }: {BASE_PATH?: string, routes?: Routes } = domainRoutes;
-        
+        const { BASE_PATH, routes }: {BASE_PATH?: string, routes?: Routes } = domainRoutes;
         if(!_.isUndefined(BASE_PATH) && (_.isArray(routes) && routes.length != 0)) {
           const router = server.getRouter();
           if(!_.isUndefined(router)) {
             routes.forEach(route => {
-              const { path, validations=undefined, handler } = route;
-              const method = server.getMethod(route.method);
+              const { path, validations=undefined, handler, method } = route;
               if(!_.isUndefined(method)) {
                 interface Routers {
-                  [key: string]: Router;
-                  GET: Router;
-                  POST: Router;
-                  PUT: Router;
-                  DELETE: Router;
+                  [key: string]: () => void;
+                  GET: () => void;
+                  POST: () => void;
+                  PUT: () => void;
+                  DELETE: () => void;
                 }
 
                 const routers: Routers = {
-                  GET: router.get(`${path}`, !_.isUndefined(validations) ? validations : [], handler),
-                  POST: router.post(`${path}`, !_.isUndefined(validations) ? validations : [], handler),
-                  PUT: router.put(`${path}`, !_.isUndefined(validations) ? validations : [], handler),
-                  DELETE: router.delete(`${path}`, !_.isUndefined(validations) ? validations : [], handler)
+                  GET: () => router.get(path, !_.isUndefined(validations) ? validations : [], handler),
+                  POST: () => router.post(path, !_.isUndefined(validations) ? validations : [], handler),
+                  PUT: () => router.put(path, !_.isUndefined(validations) ? validations : [], handler),
+                  DELETE: () => router.delete(path, !_.isUndefined(validations) ? validations : [], handler)
                 }
-                routers[method];
-                
+
+                Object.prototype.hasOwnProperty.call(routers, method) && routers[method]();
               }
             });
-          
+            
             server.useRouter(BASE_PATH, router);
           }
         }

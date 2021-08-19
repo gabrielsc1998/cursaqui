@@ -38,8 +38,8 @@ class CoursesController {
   getById = async (request: Request, response: Response) => {
     try {
       this._validateRequestData(request);
-      const { id=0 } = request.params;
-      const getCourse = await CoursesModule.getById(Number(id));
+      const { id } = request.params;
+      const getCourse = await this._module.getById(Number(id));
       if(!_.isUndefined(getCourse)) {
         response.status(200).send(getCourse);
       } else {
@@ -53,7 +53,7 @@ class CoursesController {
   listAll = async (request: Request, response: Response) => {
     try {
       this._validateRequestData(request);
-      const courseList = await CoursesModule.listAll();
+      const courseList = await this._module.listAll();
       if(!_.isUndefined(courseList)) {
         response.status(200).send(courseList);
       } else {
@@ -67,9 +67,9 @@ class CoursesController {
   updateById = async (request: Request, response: Response) => {
     try {
       this._validateRequestData(request);
-      const { id=0 } = request.params;
+      const { id } = request.params;
       const payloaUpdateCourse: UpdateCourse = request.body;
-      const updateCourse = await CoursesModule.updateById(Number(id), {...payloaUpdateCourse});
+      const updateCourse = await this._module.updateById(Number(id), {...payloaUpdateCourse});
       if(!_.isUndefined(updateCourse)) {
         response.status(200).send({ msg: 'Course updated!' });
       } else {
@@ -83,8 +83,8 @@ class CoursesController {
   deleteById = async (request: Request, response: Response) => {
     try {
       this._validateRequestData(request);
-      const { id=0 } = request.params;
-      const deleteCourse = await CoursesModule.deleteById(Number(id));
+      const { id } = request.params;
+      const deleteCourse = await this._module.deleteById(Number(id));
       if(!_.isUndefined(deleteCourse)) {
         response.status(200).send({ msg: 'Course deleted!' });
       } else {
