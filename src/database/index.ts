@@ -4,15 +4,17 @@ import { QueryResult } from 'pg';
 
 import config from '../config';
 
+type Alias = Array<string | number | boolean | void>;
+
 class Database {
 
-  _pool: Pool;
+  private _pool: Pool;
 
   constructor() {
     this._pool = this._config();
   }
 
-  _config(): Pool {
+  private _config = (): Pool => {
     return new Pool({
       user: config.db.user,
       host: config.db.url,
@@ -23,7 +25,7 @@ class Database {
     });
   }
 
-  async connect(): Promise<boolean> {
+  connect = async(): Promise<boolean> => {
     try {
       if(await this._pool.connect()) {
         console.log(' ## Connected to database!');
@@ -35,7 +37,7 @@ class Database {
     return false;
   }
 
-  executeQuery(query: string, alias?: Array<string | number | boolean | void>): Promise<QueryResult | undefined> {
+  executeQuery = (query: string, alias?: Alias): Promise<QueryResult | undefined> => {
     return new Promise((resolve, reject) => {
       try {
         _.isUndefined(alias) ? alias = [] : false;

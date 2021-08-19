@@ -3,6 +3,8 @@ import { Router } from 'express';
 import { Express } from 'express';
 import cors from 'cors';
 
+import config from '../config';
+
 class Server {
   
   private _app: Express;
@@ -25,7 +27,7 @@ class Server {
   start = async (): Promise<boolean> => {
     return new Promise((resolve, reject) => {
       try {
-        const port=3000;
+        const port = config.app.port;
         this._app.listen(port, () => {
           console.log(` ## Server started - listening on http://localhost:${port}`);
           resolve(true);

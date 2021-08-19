@@ -7,6 +7,14 @@ import { Routes } from './types';
 
 const SUBDIR_ROUTES = 'routes';
 
+interface Routers {
+  [key: string]: () => void;
+  GET: () => void;
+  POST: () => void;
+  PUT: () => void;
+  DELETE: () => void;
+}
+
 class Domains {
 
   private _domainRoutes: Array<{BASE_PATH?: string, routes: Routes }>=[];
@@ -45,14 +53,7 @@ class Domains {
             routes.forEach(route => {
               const { path, validations=undefined, handler, method } = route;
               if(!_.isUndefined(method)) {
-                interface Routers {
-                  [key: string]: () => void;
-                  GET: () => void;
-                  POST: () => void;
-                  PUT: () => void;
-                  DELETE: () => void;
-                }
-
+                
                 const routers: Routers = {
                   GET: () => router.get(path, !_.isUndefined(validations) ? validations : [], handler),
                   POST: () => router.post(path, !_.isUndefined(validations) ? validations : [], handler),
@@ -60,7 +61,10 @@ class Domains {
                   DELETE: () => router.delete(path, !_.isUndefined(validations) ? validations : [], handler)
                 }
 
-                Object.prototype.hasOwnProperty.call(routers, method) && routers[method]();
+                if(Object.prototype.hasOwnProperty.call(routers, method)) {
+                  routers[method]();
+                  console.log(` ## ${method} | ${BASE_PATH}${path}`);
+                }
               }
             });
             
