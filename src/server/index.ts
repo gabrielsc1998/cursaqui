@@ -1,6 +1,4 @@
-import express from 'express';
-import { Router } from 'express';
-import { Express } from 'express';
+import express, { Router, Express } from 'express';
 import cors from 'cors';
 
 import config from '../config';

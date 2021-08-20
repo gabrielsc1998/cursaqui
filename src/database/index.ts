@@ -1,6 +1,5 @@
 import _ from 'lodash';
-import { Pool } from 'pg';
-import { QueryResult } from 'pg';
+import { Pool, QueryResult } from 'pg';
 
 import config from '../config';
 
