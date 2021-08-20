@@ -11,9 +11,7 @@ const expect = chai.expect;
 type Server = Express | undefined;
 type Request = ChaiHttp.Agent
 let server: Server;
-let request: Request; // = chai.request; 
-
-// import { teste } from './createCourse.spec';
+let request: Request; 
 
 const payload = {
 	name: "React JS",
@@ -46,7 +44,6 @@ describe('Testing...', function () {
   it('Should create a course', async () => {
     const { status, body } = await request.post('/courses/create').send({...payload});
     console.log(body);
-    
     id = body.id;
     expect(status).to.equal(201);
   });
