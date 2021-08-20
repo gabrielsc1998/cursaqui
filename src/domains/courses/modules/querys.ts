@@ -4,7 +4,7 @@ const tableName = 'courses';
 
 export const CREATE_COURSES_TABLE = `
   CREATE TABLE IF NOT EXISTS ${tableName} (
-    id SERIAL PRIMARY KEY NOT NULL,
+    id SERIAL PRIMARY KEY,
     name VARCHAR(100),
     category VARCHAR(50),
     teacher_name VARCHAR(100),
@@ -27,6 +27,7 @@ export const CREATE_COURSE = `
     duration,
     status
   ) VALUES ($1, $2, $3, $4, $5, $6, $7)
+    RETURNING id;
 `;
 
 export const GET_ALL_COURSES = `
@@ -56,3 +57,6 @@ export const DELETE_COURSE_BY_ID = `
   DELETE FROM ${tableName} WHERE id=$1
 `;
 
+export const DELETE_ALL_COURSES = `
+  TRUNCATE TABLE ${tableName}
+`;

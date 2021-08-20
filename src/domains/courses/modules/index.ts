@@ -9,7 +9,8 @@ import {
   GET_ALL_COURSES,
 	GET_COURSE_BY_ID,
 	DELETE_COURSE_BY_ID,
-	UPDATE_COURSE_BY_ID
+	UPDATE_COURSE_BY_ID,
+	DELETE_ALL_COURSES
 } from './querys';
 
 class CoursesModule {
@@ -35,7 +36,7 @@ class CoursesModule {
 			const alias = await this._loadAlias(payload);
       const result = await db.executeQuery(CREATE_COURSE, alias);
 			if(!_.isUndefined(result)) {
-				return result.rows;
+				return result.rows[0];
 			}
 			return result;
 		} catch (error) {
@@ -82,6 +83,18 @@ class CoursesModule {
 	deleteById = async (id: number) => {
 		try {
 			const result = await db.executeQuery(DELETE_COURSE_BY_ID, [id]);
+			if(!_.isUndefined(result)) {
+				return result.rows;
+			}
+			return result;
+		} catch (error) {
+			return { error };
+		}
+	}
+
+	deleteAll = async () => {
+		try {	
+			const result = await db.executeQuery(DELETE_ALL_COURSES);
 			if(!_.isUndefined(result)) {
 				return result.rows;
 			}

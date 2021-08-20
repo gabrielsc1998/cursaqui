@@ -54,6 +54,12 @@ const routes: Array<Routes> = [
     ],
     handler: controller.deleteById
   },
+
+  {
+    method: 'DELETE',
+    path: '/',
+    handler: controller.deleteAll
+  },
 ]
 
 export { BASE_PATH, routes };

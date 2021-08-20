@@ -21,18 +21,13 @@ class CoursesController {
   }
 
   create = async (request: Request, response: Response) => {
-
-    /*
-      #swagger.tags = ['Dispositivo']
-      #swagger.description = 'Rota para extrair a versão do firmware do dispositivo'
-    */
    
     try {
       this._validateRequestData(request);
       const payloadCreateCourse: CreateCourse = request.body;
-      const result = await this._module.create(payloadCreateCourse);
-      if(!_.isUndefined(result)) {
-        response.status(201).send({ msg: 'Course created!' });
+      const resp = await this._module.create(payloadCreateCourse);
+      if(!_.isUndefined(resp)) {
+        response.status(201).send({ msg: 'Course created!', id: resp.id });
       } else {
         throw undefined;
       }
@@ -93,6 +88,20 @@ class CoursesController {
       const deleteCourse = await this._module.deleteById(Number(id));
       if(!_.isUndefined(deleteCourse)) {
         response.status(200).send({ msg: 'Course deleted!' });
+      } else {
+        throw undefined;
+      }
+    } catch(error) {
+      response.status(400).send({ error });
+    }
+  }
+
+  deleteAll = async (request: Request, response: Response) => {
+    try {
+      this._validateRequestData(request);
+      const deleteCourse = await this._module.deleteAll();
+      if(!_.isUndefined(deleteCourse)) {
+        response.status(200).send({ msg: 'All courses deleted!' });
       } else {
         throw undefined;
       }

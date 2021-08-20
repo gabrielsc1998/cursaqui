@@ -1,80 +1,70 @@
-// import should from 'should';
-import request from 'request';
+import _ from 'lodash';
 import chai from 'chai';
+import chaiHttp from 'chai-http';
 
-import config from '../src/config';
+import app from '../src/app';
+import { Express } from 'express';
 
+chai.use(chaiHttp);
 const expect = chai.expect;
-const urlBase = `http://localhost:${config.app.port}`;
 
-describe("Teste listagem", () => {
+type Server = Express | undefined;
+type Request = ChaiHttp.Agent
+let server: Server;
+let request: Request; // = chai.request; 
 
-  it("Deve listar tudo", (done) => {
-    request.get(
-      {
-        url : urlBase + "/courses/"
-      },
-      function(error, response, body) {
+// import { teste } from './createCourse.spec';
 
-        let _body = {};
-        try{
-          _body = JSON.parse(body);
-        }
-        catch(e){
-          _body = {};
-        }
+const payload = {
+	name: "React JS",
+  category: "Programação",
+  teacher_name: "Gabriel Caetano",
+  qtd_vacancies: 20,
+  value: 59.90,
+  duration: 500,
+  status: "Aberto"
+};
 
-        console.log(_body)
-        // utilizando a funcao expect do chai, vamos verificar se o resultado da chamada foi sucesso (200)
-        expect(response.statusCode).to.equal(200);
+let id: number | undefined;
 
-        // // agora, verificamos se retornou a propriedade cards
-        // if( _body.should.have.property('cards') ){
-        //   //se retornou, vamos verificar o tamanho, deve ser menor ou igual a 100 itens 
-        //   expect(_body.cards).to.have.lengthOf.at.most(100);
-        // }
+describe('Testing...', function () {
+  
+  before(async function () { 
+    server = await app();
+    if(_.isUndefined(server)) {
+      throw ` ## Problem to start the server!` 
+    }
+  })
 
-        done(); // avisamos o test runner que acabamos a validacao e ja pode proseeguir
-      }
-    );
+  beforeEach(() => request = chai.request(server))
+  
+  it('Should delete all courses', async () => {
+    const { status } = await request.delete('/courses/');
+    expect(status).to.equal(200);
   });
 
-  // it("Deve receber a carta 'A Indiferente' ",function(done){
-  //   //faremos a chamada com o nome em ingles mesmo, para verificar se eh a carta correta, vamos ver o artista e o nome da carta novamente
-  //   request.get(
-  //     {
-  //       url : urlBase + "/cards?name=Heedless One" 
-  //     },
-  //     function(error, response, body){
+  it('Should create a course', async () => {
+    const { status, body } = await request.post('/courses/create').send({...payload});
+    console.log(body);
+    
+    id = body.id;
+    expect(status).to.equal(201);
+  });
 
-  //       // precisamos converter o retorno para um objeto json
-  //       var _body = {};
-  //       try{
-  //         _body = JSON.parse(body);
-  //       }
-  //       catch(e){
-  //         _body = {};
-  //       }
+  it('Should get course by id', async () => {
+    const { status, body } = await request.get(`/courses/${id}`).send({...payload});
+    console.log(body);
+    expect(status).to.equal(200);
+  });
 
-  //       // sucesso (200)?
-  //       expect(response.statusCode).to.equal(200);
+  it('Should list all', async () => {
+    const { status, body } = await request.get('/courses/');
+    console.log(body);
+    expect(status).to.equal(200);
+  })
 
-  //       // agora, verificamos se retornou a propriedade cards
-  //       if( _body.should.have.property('cards') ){
-  //         //como filtramos, queremos que retorne pelo menos 1, pois existem varias versoes da mesma carta 
-  //         expect(_body.cards).to.have.lengthOf.at.least(1);
-
-  //         //faz a verificacao na primeira carta
-  //         if(_body.cards[0].should.have.property('artist')){
-  //           expect(_body.cards[0].artist).to.equal('Mark Zug');
-  //         }
-  //         if(_body.cards[0].should.have.property('name')){
-  //           expect(_body.cards[0].name).to.equal('Heedless One');
-  //         }
-  //       }
-
-  //       done(); // avisamos o test runner que acabamos a validação e já pode proseeguir
-  //     }
-  //   );
-  // });
 });
+
+after(done => {
+  done();
+})
